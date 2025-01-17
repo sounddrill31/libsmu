@@ -1147,24 +1147,16 @@ int M1000_Device::set_adc_mux(unsigned adc_mux){
 		ctrl_transfer(0x40, 0x23, 0x2071, 0, 0, 0, 100); // ADC U11
 	}
 	if(adc_mux == 4) { // change ADC MUX to CHA Voltage and Current
-		ctrl_transfer(0x40, 0x20, 0x2071, 0, 0, 0, 100); // ADC U12
-		ctrl_transfer(0x40, 0x21, 0x20F7, 0, 0, 0, 100); // ADC U11
-		ctrl_transfer(0x40, 0x22, 0x20F7, 0, 0, 0, 100); // ADC U12
-		ctrl_transfer(0x40, 0x23, 0x2071, 0, 0, 0, 100); // ADC U11
-		ctrl_transfer(0x40, 0x20, 0x20F1, 0, 0, 0, 100); // ADC U12, 0x20F1, 0x21F1
-		ctrl_transfer(0x40, 0x21, 0x20F1, 0, 0, 0, 100); // ADC U12, 0x20F1, 0x21F1
-    	ctrl_transfer(0x40, 0x22, 0x2071, 0, 0, 0, 100); // ADC U11, 0x2171, 0x2071
-		ctrl_transfer(0x40, 0x23, 0x2071, 0, 0, 0, 100); // ADC U11, 0x2171, 0x2071
+		ctrl_transfer(0x40, 0x2071, 0x20F7, 0, 0, 0, 100); // ADC U12
+		ctrl_transfer(0x40, 0x20F1, 0x20F1, 0, 0, 0, 100); // ADC U11
+		ctrl_transfer(0x40, 0x20F1, 0x20F1, 0, 0, 0, 100); // ADC U12
+		ctrl_transfer(0x40, 0x2071, 0x2071, 0, 0, 0, 100); // ADC U11
 	}
 	if(adc_mux == 5) { // change ADC MUX to CHB Voltage and Current
-		ctrl_transfer(0x40, 0x20, 0x2071, 0, 0, 0, 100); // ADC U12
-		ctrl_transfer(0x40, 0x21, 0x20F7, 0, 0, 0, 100); // ADC U11
-		ctrl_transfer(0x40, 0x22, 0x20F7, 0, 0, 0, 100); // ADC U12
-		ctrl_transfer(0x40, 0x23, 0x2071, 0, 0, 0, 100); // ADC U11
-		ctrl_transfer(0x40, 0x20, 0x2071, 0, 0, 0, 100); // ADC U12, 0x2071, 0x2171
-		ctrl_transfer(0x40, 0x21, 0x2071, 0, 0, 0, 100); // ADC U12, 0x2071, 0x2171
-        ctrl_transfer(0x40, 0x22, 0x20F1, 0, 0, 0, 100); // ADC U11, 0x21F1, 0x20F1
-		ctrl_transfer(0x40, 0x23, 0x20F1, 0, 0, 0, 100); // ADC U11, 0x21F1, 0x20F1
+		ctrl_transfer(0x40, 0x2071, 0x20F7, 0, 0, 0, 100); // ADC U12
+		ctrl_transfer(0x40, 0x20F1, 0x20F1, 0, 0, 0, 100); // ADC U11
+		ctrl_transfer(0x40, 0x20F1, 0x20F1, 0, 0, 0, 100); // ADC U12
+		ctrl_transfer(0x40, 0x2071, 0x2071, 0, 0, 0, 100); // ADC U11
 	}
 
 	return 0;

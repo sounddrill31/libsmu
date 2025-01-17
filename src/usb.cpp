@@ -17,6 +17,10 @@
 
 #include "debug.hpp"
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
+
 // Mapping of libusb error codes to system errnos.
 static std::map<int, int> libusb_to_errno_map = {
 	{LIBUSB_ERROR_INVALID_PARAM, EINVAL},

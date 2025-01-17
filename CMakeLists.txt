@@ -91,6 +91,12 @@ if(APPLE)
 	endif()
 endif()
 
+# handle Android-specific configurations
+if(ANDROID)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__ANDROID__")
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -landroid -llog")
+endif()
+
 add_subdirectory(src)
 if(BUILD_PYTHON)
 	add_subdirectory(bindings/python)

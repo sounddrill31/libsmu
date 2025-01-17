@@ -12,6 +12,10 @@
 #include <libsmu/libsmu.hpp>
 #include <boost/math/constants/constants.hpp>
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
+
 const double PI = boost::math::constants::pi<double>();
 
 using namespace smu;

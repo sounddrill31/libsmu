@@ -220,3 +220,77 @@ development support.
 Note that after v1.0.3, libsmu Windows installers no longer provide the option to install
 Python bindings. The process for installing pysmu on Windows is similar to the one described above for 
 MacOS and Linux.
+
+# Building and Running libsmu on Android
+
+## Dependencies
+
+To build the libsmu driver on Android, you will need the following dependencies:
+
+- Android NDK (Native Development Kit)
+- CMake
+- Ninja (optional, but recommended for faster builds)
+
+## Building libsmu on Android
+
+1. Download and install the Android NDK from the official Android developer website.
+2. Set up the Android NDK environment variables:
+   ```shell
+   export ANDROID_NDK_HOME=/path/to/android-ndk
+   export PATH=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
+   ```
+3. Create a build directory and navigate to it:
+   ```shell
+   mkdir build-android
+   cd build-android
+   ```
+4. Configure the build using CMake:
+   ```shell
+   cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+         -DANDROID_ABI=arm64-v8a \
+         -DANDROID_PLATFORM=android-21 \
+         -DCMAKE_BUILD_TYPE=Release \
+         -GNinja ..
+   ```
+5. Build the libsmu driver:
+   ```shell
+   ninja
+   ```
+
+# Porting Pixelpulse2 to a Multiplatform App Targeting Mobiles
+
+## Dependencies
+
+To build Pixelpulse2 on Android, you will need the following dependencies:
+
+- Android NDK (Native Development Kit)
+- CMake
+- Ninja (optional, but recommended for faster builds)
+- Qt for Android
+
+## Building Pixelpulse2 on Android
+
+1. Download and install the Android NDK from the official Android developer website.
+2. Download and install Qt for Android from the official Qt website.
+3. Set up the Android NDK environment variables:
+   ```shell
+   export ANDROID_NDK_HOME=/path/to/android-ndk
+   export PATH=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
+   ```
+4. Create a build directory and navigate to it:
+   ```shell
+   mkdir build-android
+   cd build-android
+   ```
+5. Configure the build using CMake:
+   ```shell
+   cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+         -DANDROID_ABI=arm64-v8a \
+         -DANDROID_PLATFORM=android-21 \
+         -DCMAKE_BUILD_TYPE=Release \
+         -GNinja ..
+   ```
+6. Build Pixelpulse2:
+   ```shell
+   ninja
+   ```

@@ -23,6 +23,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 		set(OSX_INSTALL_FRAMEWORKSDIR "/Library/Frameworks" CACHE STRING "Installation directory for frameworks")
 
 	install(TARGETS smu_bin RUNTIME DESTINATION ${OSX_INSTALL_FRAMEWORKSDIR}/libsmu.framework/cli)
+elseif(ANDROID)
+	install(TARGETS smu_bin RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/android)
 else()
 	install(TARGETS smu_bin RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()

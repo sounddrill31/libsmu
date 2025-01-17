@@ -29,6 +29,29 @@ if(WIN32 OR APPLE)
 	endif()
 
 	set(GTEST_LIBS gtest gtest_main)
+elseif(ANDROID)
+	# download and build gtest on Android
+	set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules)
+	include(DownloadProject)
+	download_project(
+		PROJ                googletest
+		GIT_REPOSITORY      https://github.com/google/googletest.git
+		GIT_TAG             v1.10.x
+		${UPDATE_DISCONNECTED_IF_AVAILABLE}
+	)
+
+	# Prevent gtest from overriding our compiler/linker options
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+	add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+
+	if (CMAKE_VERSION VERSION_LESS 2.8.11)
+		include_directories(
+			"${gtest_SOURCE_DIR}/include"
+			"${gmock_SOURCE_DIR}/include")
+	endif()
+
+	set(GTEST_LIBS gtest gtest_main)
 else()
 	find_package(GTest REQUIRED)
 	include_directories(${GTEST_INCLUDE_DIRS})

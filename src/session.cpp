@@ -18,6 +18,10 @@
 #include "usb.hpp"
 #include <libsmu/libsmu.hpp>
 
+#ifdef __ANDROID__
+#include <android/log.h>
+#endif
+
 extern std::exception_ptr e_ptr;
 
 using namespace std::placeholders;  // for _1, _2, _3...
