@@ -70,6 +70,8 @@ set(BUILD_TESTS OFF CACHE BOOL "Build unit tests")
 set(INSTALL_UDEV_RULES ON CACHE BOOL "Install udev rules for the M1K")
 # don't generate docs by default
 set(WITH_DOC OFF CACHE BOOL "Generate documentation with Doxygen")
+# build JNI support by default
+set(BUILD_JNI ON CACHE BOOL "Build JNI support")
 
 include(GNUInstallDirs)
 
@@ -109,6 +111,9 @@ if(BUILD_EXAMPLES)
 endif()
 if(BUILD_TESTS)
 	add_subdirectory(tests)
+endif()
+if(BUILD_JNI)
+	add_subdirectory(src/jni)
 endif()
 
 # windows installer file
