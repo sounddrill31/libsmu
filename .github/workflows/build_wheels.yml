@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04]
         #arch: [x86_64, aarch64]
-        python_version: ['3.10', '3.11', '3.12', '3.13']
+        python_version: ['3.13']
 
     steps:
       - uses: actions/checkout@v4
@@ -27,9 +27,9 @@ jobs:
           python -m pip install --upgrade pip cibuildwheel twine
           cibuildwheel --output-dir ${{ github.workspace }}/wheelhouse ${{ github.workspace }}/build
         env:
-          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_34
-          CIBW_MANYLINUX_I686_IMAGE: manylinux_2_34
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_34
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+          CIBW_MANYLINUX_I686_IMAGE: manylinux2014
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux2014
           # Skip building PyPy wheels on all platforms
           # Skip musllinux builds
           #CIBW_SKIP: "pp* *-musllinux*"
