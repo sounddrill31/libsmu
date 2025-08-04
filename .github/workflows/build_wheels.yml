@@ -1,5 +1,5 @@
 name: Build
-on: [push, pull_request]
+on: [push] # , pull_request]
 
 jobs:
   build_wheels:
@@ -53,6 +53,7 @@ jobs:
           # Skip building PyPy wheels on all platforms
           # Skip musllinux builds
           #CIBW_SKIP: "pp* *-musllinux*"
+          CIBW_SKIP: "*-manylinux*"
           CIBW_BUILD_VERBOSITY: 1
           CIBW_BEFORE_ALL: >
                             cd {project} && ./.github/scripts/install_deps.sh {package}
