@@ -27,6 +27,7 @@ cmake -DENABLE_PACKAGING=ON -DBUILD_PYTHON=ON -DPython_EXECUTABLE=$PYTHON_EXECUT
 cat setup.py
 make
 make install
-cp /usr/local/lib64/libsmu.so.1 /usr/lib64/
+cp /usr/local/lib*/libsmu.so.1 /usr/lib64/ 
+cp /usr/local/lib*/libsmu.so.1 /usr/lib/ 
 cp /usr/local/include/libsmu/libsmu.hpp /usr/include
 
