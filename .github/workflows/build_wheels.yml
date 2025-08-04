@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04] #, windows-latest, macos-latest]
-        arch: [x86_64, aarch64]
+        arch: [x86_64] #, aarch64]
         python_version: ['3.13']
         build_type: ['non-musl', 'musl']
 
