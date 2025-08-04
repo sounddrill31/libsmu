@@ -3,13 +3,14 @@ on: [push, pull_request]
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }} targeting ${{ matrix.build_type }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-24.04]
         #arch: [x86_64, aarch64]
         python_version: ['3.13']
+        build_type: ['non-musl', 'musl']
 
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +23,8 @@ jobs:
         run: |
               mkdir ${{ github.workspace }}/build/
               touch ${{ github.workspace }}/build/setup.py
-      - name: Build wheels
+      - name: Build wheels(n0n-musl)
+        if: matrix.build_type == 'non-musl'
         run: |
           python -m pip install --upgrade pip cibuildwheel twine
           cibuildwheel --output-dir ${{ github.workspace }}/wheelhouse ${{ github.workspace }}/build
@@ -33,11 +35,29 @@ jobs:
           # Skip building PyPy wheels on all platforms
           # Skip musllinux builds
           #CIBW_SKIP: "pp* *-musllinux*"
+          CIBW_SKIP: "*-musllinux*"
           CIBW_BUILD_VERBOSITY: 1
           CIBW_BEFORE_ALL: >
                             cd {project} && ./.github/scripts/install_deps.sh {package}
           CIBW_BEFORE_BUILD: pip install cython
           CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-*" 
+      - name: Build wheels(musl)
+        if: matrix.build_type == 'musl'
+        run: |
+          python -m pip install --upgrade pip cibuildwheel twine
+          cibuildwheel --output-dir ${{ github.workspace }}/wheelhouse ${{ github.workspace }}/build
+        env:
+          CIBW_MANYLINUX_X86_64_IMAGE: musllinux_1_2
+          CIBW_MANYLINUX_I686_IMAGE: musllinux_1_2
+          CIBW_MANYLINUX_AARCH64_IMAGE: musllinux_1_2
+          # Skip building PyPy wheels on all platforms
+          # Skip musllinux builds
+          #CIBW_SKIP: "pp* *-musllinux*"
+          CIBW_BUILD_VERBOSITY: 1
+          CIBW_BEFORE_ALL: >
+                            cd {project} && ./.github/scripts/install_deps.sh {package}
+          CIBW_BEFORE_BUILD: pip install cython
+          CIBW_BUILD: "cp313-*" 
       - uses: actions/upload-artifact@v4
         with:
           name: manylinux_wheels
