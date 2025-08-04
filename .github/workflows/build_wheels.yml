@@ -3,12 +3,12 @@ on: [push] # , pull_request]
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }} targeting ${{ matrix.build_type }}
+    name: Build wheels on ${{ matrix.os }} ${{ matrix.arch }} targeting ${{ matrix.build_type }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04]
-        #arch: [x86_64, aarch64]
+        os: [ubuntu-24.04] #, windows-latest, macos-latest]
+        arch: [x86_64, aarch64]
         python_version: ['3.13']
         build_type: ['non-musl', 'musl']
 
@@ -24,11 +24,12 @@ jobs:
               mkdir ${{ github.workspace }}/build/
               touch ${{ github.workspace }}/build/setup.py
       - name: Build wheels(n0n-musl)
-        if: matrix.build_type == 'non-musl'
+        if: matrix.build_type == 'non-musl' && matrix.os == 'ubuntu-24.04'
         run: |
           python -m pip install --upgrade pip cibuildwheel twine
           cibuildwheel --output-dir ${{ github.workspace }}/wheelhouse ${{ github.workspace }}/build
         env:
+          CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_I686_IMAGE: manylinux_2_28
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
@@ -38,31 +39,35 @@ jobs:
           CIBW_SKIP: "*-musllinux*"
           CIBW_BUILD_VERBOSITY: 1
           CIBW_BEFORE_ALL: >
-                            cd {project} && ./.github/scripts/install_deps.sh {package}
+            cd {project} && ./.github/scripts/install_deps.sh {package}
           CIBW_BEFORE_BUILD: pip install cython
-          CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-*" 
+          CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-*"
       - name: Build wheels(musl)
-        if: matrix.build_type == 'musl'
+        if: matrix.build_type == 'musl' && matrix.os == 'ubuntu-24.04'
         run: |
           python -m pip install --upgrade pip cibuildwheel twine
           cibuildwheel --output-dir ${{ github.workspace }}/wheelhouse ${{ github.workspace }}/build
         env:
+          CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_MANYLINUX_X86_64_IMAGE: musllinux_1_2
           CIBW_MANYLINUX_I686_IMAGE: musllinux_1_2
           CIBW_MANYLINUX_AARCH64_IMAGE: musllinux_1_2
           # Skip building PyPy wheels on all platforms
           # Skip musllinux builds
           #CIBW_SKIP: "pp* *-musllinux*"
-          CIBW_SKIP: "*-manylinux*"
           CIBW_BUILD_VERBOSITY: 1
           CIBW_BEFORE_ALL: >
                             cd {project} && ./.github/scripts/install_deps.sh {package}
           CIBW_BEFORE_BUILD: pip install cython
           CIBW_BUILD: "cp313-*" 
-      - uses: actions/upload-artifact@v4
+      - name: Upload to releases
+        uses: softprops/action-gh-release@v2
         with:
-          name: manylinux_wheels
-          path: ${{ github.workspace }}/wheelhouse
+          files: ${{ github.workspace }}/wheelhouse/*.whl
+#     - uses: actions/upload-artifact@v4
+#       with:
+#         name: manylinux_wheels
+#         path: ${{ github.workspace }}/wheelhouse
 
 #  deploy_wheels:
 #    name: Deploy wheels on test PyPI
