@@ -59,7 +59,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	SET(LIBS_TO_LINK ${LIBS_TO_LINK} m)
 endif()
 file(GLOB LIBSMU_CPPFILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
-file(GLOB LIBSMU_HEADERS ${CMAKE_SOURCE_DIR}/include/libsmu/*.hpp)
+file(GLOB LIBSMU_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/../include/libsmu/*.hpp)
 
 add_library(smu SHARED ${LIBSMU_CPPFILES} ${LIBSMU_HEADERS})
 set_target_properties(smu PROPERTIES

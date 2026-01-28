@@ -2,7 +2,7 @@ if(MSVC)
 	# needed for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS support
 	cmake_minimum_required(VERSION 3.4)
 else()
-	cmake_minimum_required(VERSION 2.8.7)
+	cmake_minimum_required(VERSION 3.5)
 endif()
 project(libsmu CXX C)
 
@@ -19,10 +19,10 @@ set(LIBSMU_VERSION ${LIBSMU_VERSION_MAJOR}.${LIBSMU_VERSION_MINOR}.${LIBSMU_VERS
 
 # determine a more descriptive project version using git info if available
 set(LIBSMU_VERSION_STR ${LIBSMU_VERSION})
-if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/.git)
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/.git)
 	# determine if the current revision is a tag
 	execute_process(COMMAND git describe --exact-match --tags HEAD
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		OUTPUT_VARIABLE LIBSMU_TAG_VERSION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		ERROR_QUIET
@@ -30,7 +30,7 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/.git)
 	# if the current revision isn't a tag, add git revision info
 	if(LIBSMU_TAG_VERSION STREQUAL "")
 		execute_process(COMMAND git rev-parse --short HEAD
-			WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 			OUTPUT_VARIABLE LIBSMU_GIT_REV
 			OUTPUT_STRIP_TRAILING_WHITESPACE
 			ERROR_QUIET
@@ -42,9 +42,9 @@ endif()
 file(WRITE ${CMAKE_BINARY_DIR}/.version ${LIBSMU_VERSION_STR})
 
 # generate version header
-configure_file(${CMAKE_SOURCE_DIR}/dist/version.hpp.in
-	${CMAKE_SOURCE_DIR}/include/libsmu/version.hpp @ONLY)
-include_directories(${CMAKE_SOURCE_DIR}/include/)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/dist/version.hpp.in
+	${CMAKE_CURRENT_SOURCE_DIR}/include/libsmu/version.hpp @ONLY)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	set(CMAKE_CXX_FLAGS "-Wall -pedantic -std=c++11 ${CMAKE_CXX_FLAGS}")
